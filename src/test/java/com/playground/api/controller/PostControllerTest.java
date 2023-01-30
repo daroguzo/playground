@@ -35,10 +35,12 @@ class PostControllerTest {
     void test2() throws Exception {
         mockMvc.perform(post("/posts")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"title\": \"\", \"content\": \"내용\"}")
+                        .content("{\"title\": null, \"content\": \"내용\"}")
                 )
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.title").value("제목은 필수 값입니다."))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.code").value("400"))
+                .andExpect(jsonPath("$.message").value("잘못된 요청입니다."))
+                .andExpect(jsonPath("$.validation.title").value("제목은 필수 값입니다."))
                 .andDo(print());
     }
 
